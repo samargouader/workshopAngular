@@ -1,0 +1,59 @@
+<div class="container my-5">
+  <h2 class="text-center mb-5 fw-bold">Liste des suggestions</h2>
+
+  <div class="mb-4">
+    <input type="text" class="form-control form-control-lg" 
+           placeholder="Rechercher une suggestion" 
+           [(ngModel)]="recherche">
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="col" *ngFor="let s of suggestionsFiltrees">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ s.title }}
+            <small class="text-muted float-end">{{ s.date | date:'dd MMM yyyy' }}</small>
+          </h5>
+          <p class="text-primary fw-bold mb-2">{{ s.category }}</p>
+          <p class="text-muted small">{{ s.description }}</p>
+
+          <span class="badge rounded-pill px-3 py-2"
+                [ngClass]="{
+                  'bg-success': s.status === 'acceptee',
+                  'bg-danger': s.status === 'refusee',
+                  'bg-warning text-dark': s.status === 'en_attente'
+                }">
+            {{ s.status === 'acceptee' ? 'Acceptée' : s.status === 'refusee' ? 'Refusée' : 'En attente' }}
+          </span>
+        </div>
+
+        <div class="card-footer d-flex justify-content-center gap-4 py-3" 
+             *ngIf="s.status !== 'refusee'">
+          <button class="btn btn-outline-primary" (click)="liker(s)">
+            Like {{ getLikes(s) }}
+          </button>
+          <button class="btn btn-outline-danger" 
+                  (click)="ajouterAuxFavoris(s)"
+                  [disabled]="estFavori(s)">
+            {{ estFavori(s) ? 'Ajouté' : 'Ajouter aux favoris' }}
+          </button>
+        </div>
+
+        <div class="card-footer text-center bg-light text-danger fw-bold" 
+             *ngIf="s.status === 'refusee'">
+          Refusée
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5" *ngIf="favoris.length > 0">
+    <h4>Mes favoris ({{ favoris.length }})</h4>
+    <div class="list-group">
+      <div class="list-group-item" *ngFor="let f of favoris">
+        <strong>{{ f.title }}</strong> <em class="text-muted">({{ f.category }})</em>
+      </div>
+    </div>
+  </div>
+</div>
