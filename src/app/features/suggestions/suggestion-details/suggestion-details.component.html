@@ -1,0 +1,48 @@
+<div class="container my-5" *ngIf="suggestion; else notFound">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow">
+        <div class="card-body">
+          <p class="text-muted mb-3">
+            <strong>Date :</strong> {{ suggestion.date | date:'fullDate' }}
+          </p>
+          <p class="mb-3">
+            <strong>Catégorie :</strong>
+            <span class="badge bg-info text-dark ms-2">{{ suggestion.category }}</span>
+          </p>
+
+          <div class="mt-4">
+            <h5>Description</h5>
+            <p class="lead">{{ suggestion.description }}</p>
+          </div>
+
+          <div class="mt-4">
+            <strong>Statut :</strong>
+            <span class="badge rounded-pill px-3 py-2 ms-2"
+                  [ngClass]="{
+                    'bg-success': suggestion.status === 'acceptee',
+                    'bg-danger': suggestion.status === 'refusee',
+                    'bg-warning text-dark': suggestion.status === 'en_attente'
+                  }">
+              {{ suggestion.status === 'acceptee' ? 'Acceptée' : 
+                  suggestion.status === 'refusee' ? 'Refusée' : 'En attente' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="card-footer text-center">
+          <button class="btn btn-lg btn-primary" (click)="goBack()">
+            ← Retour à la liste des suggestions
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #notFound>
+  <div class="container my-5 text-center">
+    <h2>Suggestion non trouvée</h2>
+    <button class="btn btn-primary mt-3" (click)="goBack()">Retour à la liste</button>
+  </div>
+</ng-template>

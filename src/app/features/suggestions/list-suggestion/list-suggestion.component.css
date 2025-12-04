@@ -99,3 +99,16 @@ h2 {
     max-width: 100%;
   }
 }
+
+.btn-details {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-details:hover {
+  background: #0056b3;
+}
