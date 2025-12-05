@@ -60,19 +60,26 @@ export class SuggestionDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    
-    if (id) {
-      const suggestionTrouvee = SUGGESTIONS_MOCK.find(s => s.id === +id);
+    this.route.params.subscribe(params => {
+      const id = +params['id'];   
+
+      const suggestionTrouvee = SUGGESTIONS_MOCK.find(s => s.id === id);
+
       if (suggestionTrouvee) {
         this.suggestion = suggestionTrouvee;
       } else {
         this.router.navigate(['/suggestions']);
       }
-    }
+    });
   }
+
 
   goBack(): void {
     this.router.navigate(['/suggestions']);
+  }
+
+  next(): void {
+    const nextId = (this.suggestion!.id % SUGGESTIONS_MOCK.length) + 1;
+    this.router.navigate(['/suggestions', nextId]);
   }
 }
