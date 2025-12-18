@@ -1,5 +1,8 @@
 <div class="container my-5">
-  <h2 class="text-center mb-5 fw-bold">Liste des suggestions</h2>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-center mb-0 fw-bold">Liste des suggestions</h2>
+    <a class="btn btn-success ms-3" [routerLink]="['/suggestions','new']">Ajouter suggestion</a>
+  </div>
 
   <div class="mb-4">
     <input type="text" class="form-control form-control-lg" 

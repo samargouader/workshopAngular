@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Suggestion } from '../../../models/suggestion';
+import { SuggestionService } from '../suggestion.service';
 
 const SUGGESTIONS_MOCK: Suggestion[] = [
   { 
@@ -9,7 +10,8 @@ const SUGGESTIONS_MOCK: Suggestion[] = [
     description: 'Suggestion pour organiser une journée de team building pour renforcer les liens entre les membres de l\'équipe.',
     category: 'Événements', 
     date: new Date('2025-01-20'), 
-    status: 'acceptee' 
+    status: 'acceptee',
+    nbLikes: 0
   },
   { 
     id: 2, 
@@ -17,7 +19,8 @@ const SUGGESTIONS_MOCK: Suggestion[] = [
     description: 'Proposition pour améliorer la gestion des réservations en ligne avec un système de confirmation automatique.',
     category: 'Technologie', 
     date: new Date('2025-01-15'), 
-    status: 'refusee' 
+    status: 'refusee',
+    nbLikes: 0
   },
   { 
     id: 3, 
@@ -25,7 +28,8 @@ const SUGGESTIONS_MOCK: Suggestion[] = [
     description: 'Mise en place d\'un programme de récompenses pour motiver les employés et reconnaître leurs efforts.',
     category: 'Ressources Humaines', 
     date: new Date('2025-01-25'), 
-    status: 'refusee' 
+    status: 'refusee',
+    nbLikes: 0
   },
   { 
     id: 4, 
@@ -33,7 +37,8 @@ const SUGGESTIONS_MOCK: Suggestion[] = [
     description: 'Refonte complète de l\'interface utilisateur pour une meilleure expérience utilisateur.',
     category: 'Technologie', 
     date: new Date('2025-01-30'), 
-    status: 'en_attente' 
+    status: 'en_attente',
+    nbLikes: 0
   },
   { 
     id: 5, 
@@ -41,7 +46,8 @@ const SUGGESTIONS_MOCK: Suggestion[] = [
     description: 'Organisation d\'une formation sur les bonnes pratiques de sécurité informatique pour tous les employés.',
     category: 'Formation', 
     date: new Date('2025-02-05'), 
-    status: 'acceptee' 
+    status: 'acceptee',
+    nbLikes: 0
   },
 ];
 
@@ -56,14 +62,15 @@ export class SuggestionDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private suggestionService: SuggestionService
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const id = +params['id'];   
 
-      const suggestionTrouvee = SUGGESTIONS_MOCK.find(s => s.id === id);
+      const suggestionTrouvee = this.suggestionService.getAll().find(s => s.id === id);
 
       if (suggestionTrouvee) {
         this.suggestion = suggestionTrouvee;
