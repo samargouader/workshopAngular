@@ -30,13 +30,11 @@
           </div>
         </div>
 
-        <div class="card-footer text-center">
-          <button class="btn btn-lg btn-primary" (click)="goBack()">
-            ← Retour à la liste des suggestions
-          </button>
-          <button class="btn btn-lg btn-secondary me-3" (click)="next()">
-            Suivant →
-          </button>
+        <div class="card-footer text-center d-flex justify-content-center gap-2">
+          <button class="btn btn-lg btn-danger" (click)="deleteSuggestion()">Supprimer</button>
+          <button class="btn btn-lg btn-warning" (click)="updateSuggestion()">Modifier</button>
+          <button class="btn btn-lg btn-secondary" (click)="next()">Suivant →</button>
+          <button class="btn btn-lg btn-primary" (click)="goBack()">← Retour à la liste des suggestions</button>
         </div>
       </div>
     </div>

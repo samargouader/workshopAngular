@@ -9,7 +9,7 @@
       <div *ngIf="f['title'].touched && f['title'].invalid" class="text-danger small mt-1">
         <div *ngIf="f['title'].errors?.['required']">Le titre est requis.</div>
         <div *ngIf="f['title'].errors?.['minlength']">Le titre doit contenir au moins 5 caractères.</div>
-        <div *ngIf="f['title'].errors?.['pattern']">Le titre doit commencer par une majuscule et ne contenir que des lettres.</div>
+        <div *ngIf="f['title'].errors?.['pattern']">Le titre doit commencer par une majuscule et peut contenir des lettres, espaces et caractères accentués.</div>
       </div>
     </div>
 

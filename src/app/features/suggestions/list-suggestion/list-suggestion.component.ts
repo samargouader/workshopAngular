@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Suggestion } from '../../../models/suggestion';
-import { SuggestionService } from '../suggestion.service';
+import { SuggestionService } from '../../../core/services/suggestion.service';
 
 interface SuggestionAvecActions extends Suggestion {
   isFavorite: boolean;
@@ -20,8 +20,31 @@ export class ListSuggestionComponent implements OnInit {
   constructor(private suggestionService: SuggestionService) {}
 
   ngOnInit(): void {
-    // Fetch suggestions from the service
-    this.suggestions = this.suggestionService.getAll().map((s: Suggestion) => ({ ...s, isFavorite: false }));
+    // Part 2: fetch from backend via HttpClient
+    this.loadFromServer();
+  }
+
+  private loadFromServer(): void {
+    this.suggestionService.getSuggestions().subscribe({
+      next: list => this.suggestions = list.map((s: Suggestion) => ({ ...s, isFavorite: false })),
+      error: err => {
+        console.error('Failed to load suggestions from server, falling back to local list', err);
+        // fallback to local list
+        this.suggestions = this.suggestionService.getSuggestionList().map((s: Suggestion) => ({ ...s, isFavorite: false }));
+      }
+    });
+  }
+
+  deleteSuggestion(id: number): void {
+    // Try HTTP delete first
+    this.suggestionService.deleteSuggestion(id).subscribe({
+      next: () => this.loadFromServer(),
+      error: err => {
+        console.error('Failed to delete on server, deleting local copy', err);
+        this.suggestionService.deleteSuggestionLocal(id);
+        this.suggestions = this.suggestionService.getSuggestionList().map((s: Suggestion) => ({ ...s, isFavorite: false }));
+      }
+    });
   }
 
   get suggestionsFiltrees(): SuggestionAvecActions[] {
@@ -44,8 +67,19 @@ export class ListSuggestionComponent implements OnInit {
   }
 
   liker(s: SuggestionAvecActions): void {
-    s.nbLikes++;
-    this.suggestionService.update(s);
+    const newLikes = s.nbLikes + 1;
+
+    // Try to update on server
+    this.suggestionService.updateNbLikes(s.id, newLikes).subscribe({
+      next: updated => {
+        s.nbLikes = updated.nbLikes;
+      },
+      error: err => {
+        console.error('Failed to update likes on server, updating local copy', err);
+        s.nbLikes = newLikes;
+        this.suggestionService.updateSuggestionLocal(s);
+      }
+    });
   }
 
   ajouterAuxFavoris(s: SuggestionAvecActions): void {

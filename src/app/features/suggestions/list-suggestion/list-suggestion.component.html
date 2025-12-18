@@ -50,7 +50,8 @@
             Refusée
           </div>
 
-          <div class="ms-auto">
+          <div class="ms-auto d-flex gap-2">
+            <button class="btn btn-danger" (click)="deleteSuggestion(s.id)">Supprimer</button>
             <button class="btn btn-primary" 
                     [routerLink]="['/suggestions', s.id]">
               Détails
